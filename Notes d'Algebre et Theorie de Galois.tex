@@ -1,0 +1,1649 @@
+\documentclass{article}           %% ceci est un commentaire (apres le caractere %)
+\usepackage[utf8]{inputenc}     %% adapte le style article aux conventions francophones
+\usepackage[french]{babel}
+%\usepackage[T1]{fontenc}          %% permet d'utiliser les caractères accentués
+\usepackage{makeidx}         
+\usepackage{scrextend}
+\usepackage{mathtools, bm}
+\usepackage{amssymb, bm}
+\usepackage{amsthm}
+%\usepackage{yfonts}
+\usepackage{tikz-cd}
+\usepackage{stmaryrd}
+\usepackage{hyperref}
+\usepackage{ulem}
+\usepackage{geometry}
+
+\geometry{margin=3cm}
+
+\frenchbsetup{StandardLists=true} 
+%----------------------------------------------------------------------------------------
+%	TITLE AND AUTHOR(S)
+%----------------------------------------------------------------------------------------
+%
+
+% É
+
+
+\def\labelitemi{--} 		% Définit le label utilisé dans les listes (type itemize)
+
+% Simplifie l'écriture des ensembles usuels
+\newcommand\N{\mathbb{N}}
+\newcommand\Z{\mathbb{Z}}
+\newcommand\Q{\mathbb{Q}}
+\newcommand\R{\mathbb{R}}
+\newcommand\C{\mathbb{C}}
+
+
+\newcommand\card[1]{|{#1}|} 					% Permet d'écrire le cardinal d'un ensemble plus proprement (de la forme |E|)
+\newcommand\set[1]{\mathbb{#1}} 				% Permet d'afficher plus simplement les ensembles autres que ceux définis plus haut
+\newcommand\cali[1]{\mathcal{#1}} 				% Fonctionne comme la macro '\set', mais avec \mathcal au lieu de \mathbb 
+\newcommand\norm[1]{|\!|{#1} |\!|} 				% Définit le symbole d'une norme appliquée à un paramètre
+\newcommand\Norm{\norm{\cdot}} 				% Définit le symbole d'une norme
+\newcommand\inter[1]{\llbracket {#1} \rrbracket} 	% Définit les intervalles d'entiers
+
+\newcommand\summ[2]{\underset{#1}{\overset{#2}{\sum}}} 		% Définit proprement les sommes, avec les paramètres en haut et en bas, et non à coté du sigma
+\newcommand\prodd[2]{\underset{#1}{\overset{#2}{\prod}}} 	% Définit proprement les produits
+\newcommand\capp[2]{\underset{#1}{\overset{#2}{\bigcap}}} 	% Définit proprement les intersections
+\newcommand\cupp[2]{\underset{#1}{\overset{#2}{\bigcup}}} 	% Définit proprement les unions
+\newcommand\opluss[2]{\underset{#1}{\overset{#2}{\bigoplus}}} 	% Définit proprement les sommes directes
+
+\let\dummy\exists						%Ajoute un espace après le quantificateur existentiel (c'est plus esthétique)
+\renewcommand*{\exists}{\dummy \,} 
+
+\newcommand\tq{\hspace{0.3cm}} 		%Un effet "tel que" dans une formule (ie, ajoute un large espace pour bien différencier les différentes parties d'une proposition)
+
+
+\newcommand\noset[1]{\backslash{#1}} 	% Permet d'écrire "A\B" plus rapidement (avec B en paramètre)
+\newcommand\nozero{\backslash \{0\}} 	% Permet d'acrire  ''\{0}''. C'est plus rapide que le \noset{ \{0\} }...
+\newcommand\sma{S^{-1}A} 			% Permet d'écrire S^{-1}A plus rapidement (utilisé dans la section sur la localisation)
+
+
+% Permet d'écrire une suite exacte courte 0-->A-->B-->C-->0 avec r : A-->B et s : B-->C
+% Format : \sec{A}{B}{C}{r}{s}
+\newcommand\SEC[5]{
+0 {\longrightarrow} 
+{#1} \overset{{#4}}{\longrightarrow} 
+{#2} \overset{{#5}}{\longrightarrow} 
+{#3} {\longrightarrow} 
+0}
+
+
+% Permet de définir une fonction proprement (à utiliser en mode equation, plutôt)
+% Format : \deff{nom de la fonction}{départ}{arrivée}{variable}{image}
+\newcommand\deff[5]{
+\begin{tabular}{cl}
+${#1} :$ &
+$ \left \{
+\begin{array}{ccc}
+{#2} & \rightarrow & {#3} \\
+{#4} & \mapsto & {#5} \\
+\end{array}
+\right .
+$ \\
+\end{tabular}
+}
+
+% On crée notre propre style de théorèmes. Parce que pourquoi pas.
+\newtheoremstyle{break}% name
+  {0.8cm}			% Space above, empty = `usual value'
+  {}			% Space below
+  {}			% Body font = normal
+  {}			% Indent amount (empty = no indent, \parindent = paragraph indent)
+  {\bfseries}	% Thm head font = bold
+  {}			% Punctuation after thm head
+  {\newline}	% Space after thm head: \newline = linebreak
+  {}			% Thm head spec
+\theoremstyle{break}
+
+\newtheoremstyle{add}% name
+  {0.5cm}			% Space above, empty = `usual value'
+  {}			% Space below
+  {}			% Body font = normal
+  {}			% Indent amount (empty = no indent, \parindent = paragraph indent)
+  {}			% Thm head font = bold
+  {}			% Punctuation after thm head
+  {\newline}	% Space after thm head: \newline = linebreak
+  {}			% Thm head spec
+\theoremstyle{add}
+
+
+% Permet la bonne énumération des paragraphes.
+% format : \begin{theoreme}[Pythagore} a^2 + b^2 = c^2 \end{theoreme}
+
+\theoremstyle{break} %Définit le style des \newtheorem. Permet de ne pas avoir le texte en italique et d'avoir un saut de ligne entre l'en-tête et le blabla, entre autres
+\newtheorem{theoreme}{Théorème}[section]
+\newtheorem{lemme}{Lemme}[section]
+\newtheorem{corollaire}{Corollaire}[section]
+\newtheorem{definition}{Définition}[section]
+\newtheorem{proposition}{Proposition}[section]
+
+\theoremstyle{add}
+\newtheorem*{exemple}{\textit{\underline{Exemple} :}}
+\newtheorem*{remarque}{\textit{\underline{Remarque} : }}
+\newtheorem*{notation}{\textit{\underline{Notation} : }}
+%\newtheorem{}{}[section] %Template de newtheorem
+
+
+% Force un saut de ligne après le header d'un théorème. Nécessaire lorsque celui-ci commence par un itemize ou enumerate
+% Format : \begin{theoreme}\NL ....... \end{theoreme}
+\newcommand\NL{
+\mbox{}
+\vspace*{-\parsep}
+\vspace*{-\baselineskip}}
+
+
+\title{Notes de cours d'Algèbre et Théorie de Galois — 4M002}
+\author{}
+
+%----------------------------------------------------------------------------------------
+
+\hypersetup{
+    colorlinks,
+    linkcolor=blue
+}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%  CHAPITRE 1 %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Anneaux}
+\subsection{Définition et premières constructions}
+
+% Définition
+\begin{definition}[Monoïde]
+Un monoïde est la donnée d'un couple $(G, \cdot)$ formé d'un ensemble $G$ et d'une loi de composition interne $\cdot : G \times G \rightarrow G$ qui vérifie :
+\begin{itemize}
+\item \textit{associativité : } $\forall g,h,k \in G$, \tq $g \cdot (h \cdot k) = (g \cdot h) \cdot k$
+\item \textit{élément neutre :} $\exists e \in G$, \tq $\forall g \in G$ \tq $e \cdot g = g \cdot e = g$
+\end{itemize}
+
+Un monoïde est dit \textit{commutatif} si pour tout couple $(g,h)$ dans $G$, on a : $g \cdot h = h \cdot g$.
+\end{definition}
+
+% Définition
+\begin{definition}[Groupe]
+Un groupe $(G, \cdot)$ est un monoïde qui vérifie en plus l'axiome suivant :
+\begin{itemize}
+\item \textit{inversibilité : } $\forall g \in G, \exists h \in G$, \tq $g \cdot h = h \cdot g = e$
+\end{itemize}
+$(G, \cdot)$ est dit \textit{abélien} si son monoïde associé est commutatif.
+\end{definition}
+
+% Définition
+\begin{definition}[Anneau]
+Un anneau est la donnée d'un triplet $(A, +, \times)$ vérifiant les conditions suivantes :
+\begin{itemize}
+\item $(A, +)$ est un groupe commutatif
+\item $(A, \times)$ est un monoïde
+\item \textit{distributivité à gauche : } $\forall a,b,c \in A, \tq a \times (b+c) = (a \times b) + (a \times c)$
+\item \textit{distributivité à droite : } $\forall a,b,c \in A, \tq (b+c) \times a = (b \times a) + (c \times a)$
+\end{itemize}
+
+Un anneau est dit \textit{commutatif} si le monoïde $(A, \times)$ est commutatif.
+\end{definition}
+
+% Remarque
+\begin{remarque}\NL
+\begin{itemize}
+\item L’élément neutre additif de $A$ est noté $0_A$ tandis que l'élément neutre multiplicatif est noté $1_A$.
+\item Le groupe $(A^{\times}, \cdot)$ est appelé \textit{groupe des inversibles} de $A$.
+\end{itemize}
+\end{remarque}
+
+% Exemple
+\begin{exemple}
+$(\Z, +, \cdot)$, $(\Z /n \Z, +, \cdot)$, $(\R, +, \cdot)$, $(\R, +, \cdot)$, $(\C, +, \cdot)$, $(\R[X], +, \cdot)$ qui sont des anneaux commutatifs.\\
+$(M_n(\R), +, \cdot)$ qui est non commutatif.
+\end{exemple}
+
+% Exemple
+\begin{exemple}[Exemple de groupe des inversibles]\NL
+\begin{tabular}{|c|c|}
+\hline
+$A$ & $A^\times$ \\
+\hline
+\hline
+$\Z /n \Z$ & $\{x \in \inter{0,n} \;|\; pgcd(x,n)=1 \} $\\
+\hline
+$\Z /p \Z$ & $\Z /p \Z \backslash \{0\}$ \\
+\hline
+$\Z$ & $\{ \pm 1 \}$ \\
+\hline
+$\C$ & $\C \backslash \{0\}$ \\
+\hline
+$M_n(\C)$ & $GL_n(\C)$ \\
+\hline
+$\C[X]$ & $\C[X] \backslash \{0\}$ \\
+\hline
+\end{tabular}
+\end{exemple}
+
+% Définition
+\begin{definition}[Morphisme d'anneaux]
+Soient $A$, $B$ deux anneaux. On dit que $\varphi : A \rightarrow B$ est un morphisme d'anneaux si il induit un morphisme de groupe (resp. de monoïde) $\varphi : (A, +) \rightarrow (B,+)$ (resp. $\varphi : (A, \times) \rightarrow (B,\times)$). \\
+C'est à dire que $\varphi$ vérifie les conditions, pour tout $a$, $b$ dans $A$ :
+\begin{itemize}
+\item $\varphi(a +_A b) = \varphi(a) +_B \varphi(b)$
+\item $\varphi(a \times_A b) = \varphi(a) \times_B \varphi(b)$
+\item $\varphi(1_A) = 1_B$
+\end{itemize}
+L'ensemble des morphismes d'anneaux de $A$ vers $B$ est noté $Hom(A,B)$. L'ensemble $Hom(A,A)$ est noté $End(A)$.
+\end{definition}
+
+\textit{Remarque :} On dit qu'un morphisme d'anneaux est \textit{injectif} (resp. \textit{surjectif}) si l'application ensembliste sous-jacente est injective (resp. surjective). \\
+
+% Proposition
+\begin{proposition}
+Soient $\varphi : A \rightarrow B$ et $\psi : B \rightarrow C$ deux morphismes d'anneaux. L'application $\psi \circ \varphi : A \rightarrow C$ est un morphisme d'anneaux.
+\end{proposition}
+
+%Proposition
+\begin{proposition}
+Soit $\varphi : A \rightarrow B$ un isomorphisme d'anneaux.
+On a alors : 
+
+\begin{itemize}
+\item L'application $\varphi^{-1} : B \rightarrow A$ est un isomorphisme d'anneaux.
+\item $\varphi$ est injectif $\Longleftrightarrow ker \varphi = \{0_A\}$
+\item $\varphi(A^\times) \subset B^\times$ et $\varphi_{|A^\times} : A^\times \rightarrow B^\times$ sont des morphismes de groupes.
+\end{itemize}
+\end{proposition}
+
+% Exemple
+\begin{exemple}
+Tout anneau $A$ admet un morphisme $\deff{C_A}{\Z}{A}{1}{1_A}$  appelé \textit{morphisme caractéristique}.\\
+Ce morphisme n'est pas toujours injectif ! (ex : $A = \Z / n \Z$)
+\end{exemple}
+
+
+% Définition
+\begin{definition}[Sous-anneau]
+Soit $A$ un anneau. Un sous-anneau de $A$ est un sous-ensemble $A' \subset A$ qui vérifie :
+\begin{itemize}
+\item $0_A \in A'$,  $1_A \in A'$
+\item $\forall a,b \in A' \tq a+b \in A'$
+\item $\forall a,b \in A' \tq a \times b \in A'$
+\end{itemize}
+\end{definition}
+
+\begin{remarque}
+Il existe un morphisme d'anneaux canonique $\deff{\iota}{A'}{A}{a}{a}$.
+\end{remarque}
+
+% Définition
+\begin{definition}[centre d'un anneau]
+Soit $A$ un anneau. On appelle \textit{centre de $A$} le sous-anneau $Z(A) := \{ a \in A \; | \; \forall b \in A$, \tq $ab=ba \}$. \\
+\end{definition}
+
+\begin{remarque}
+Si $A$ est commutatif, on a l'égalité $Z(A)=A$.
+\end{remarque}
+
+% Définition : Algèbre d'anneaux
+\begin{definition}[Algèbre d'anneau]
+Soit $A$ un anneau commutatif. On dit qu'un morphisme $\varphi : A \rightarrow B$ est une $A$-algèbre si Im$(\varphi) \subset Z(B)$. \\
+
+Soient $\varphi_B : A \rightarrow B$ et $\varphi_C : A \rightarrow C$ deux $A$-algèbres. On appelle \textit{morphisme de $A$-algèbres} tout morphisme d'anneau $\varphi : B \rightarrow C$ tel qu'on ait l'égalité : $\varphi \circ \varphi_B = \varphi_C$. \\
+
+\begin{tikzcd}
+A \arrow[r, "\varphi_C"] \arrow[d, "\varphi_B"'] & C \\
+B \arrow[ru, "\varphi"', dashed]                 &  
+\end{tikzcd}
+
+On note $Hom_A(B,C)$ l'ensemble des $A$-algèbres de $B$ dans $C$, et $End_A(B) := Hom_A(B,B)$.
+\end{definition}
+
+\begin{exemple}
+$Id_B$ est toujours un morphisme de $A$-algèbre.
+\end{exemple}
+
+% Proposition
+\begin{proposition}
+Soient $\varphi : B \rightarrow C$ et $\psi : C \rightarrow D$ deux morphismes de $A$-algèbres. L'application $\psi \circ \varphi$ est alors aussi un morphisme de $A$-algèbres.\\
+\end{proposition}
+
+
+\begin{exemple}\NL
+\begin{itemize}
+\item La caractéristique $C_A : \Z \rightarrow A$ munit tout anneau d'une $\Z$-algèbre.
+\item Le morphisme injectif $Z(A) \rightarrow A$ fait de tout anneau une algèbre sur son centre.
+\item Si $A$ et $B$ sont des anneaux commutatifs, tout morphisme d'anneau de $A$ vers $B$ est une $A$-algèbre.
+\end{itemize}
+\end{exemple}
+
+%% Subsubsection Anneaux Produit
+\subsubsection{Anneau produit}
+Soit $(A_i)_{i \in I}$ une famille d'anneaux. On peut munir le produit ensembliste $A = \prodd{I}{} A_i$ d'une structure d'anneau, en posant, pour $a$ et $b$ dans $A$ : \\
+\begin{itemize}
+\item $ 0 := (0_{A_i})_{i \in I}$
+\item $ 1 := (1_{A_i})_{i \in I}$
+\item $ a + b := (a_i +_{A_i} b_i)_{i \in I}$
+\item $ a \times b := (a_i \times_{A_i} b_i)_{i \in I}$
+\end{itemize} 
+
+% Proposition
+\begin{proposition}
+Les applications définies par $\deff{\pi_j}{\prodd{I}{} A_i}{A_j}{a}{a_j}$  sont des morphismes d'anneaux appelés \textit{projections canoniques} sur $A_j$.
+\end{proposition}
+
+
+% Lemme
+\begin{lemme}[Propriété universelle du produit]
+Soit $(A_i)_{i \in I}$ une famille d'anneaux. Il existe un anneau $P$ et une famille de morphismes d'anneaux $\pi_i : P \rightarrow A_i$, \tq $i \in I$, telle que pour toute famille quelconque de morphismes d'anneaux $f_i : A \rightarrow A_i$ il existe un unique morphisme d'anneaux $f : A \rightarrow P$ tel qu'on ait l'égalité : $\pi_i \circ f = f_i$, \tq $\forall i \in I$.\\
+
+Tout ceci se comprend mieux avec un diagramme commutatif :\\
+\begin{tabular}{cc}
+\begin{tikzcd}
+A \arrow[r, "f_i"] \arrow[d, "\exists ! f \;"', dashed] & A_i \\
+P \arrow[ru, "\pi_i"']                                  &    
+\end{tikzcd}
+&
+$\exists! f $, \tq $\forall i \in I, \pi_i \circ f = f_i$ \\
+\end{tabular}
+\end{lemme}
+
+
+% Remarque
+\begin{remarque}
+Une façon moins claire d'exprimer ce lemme consiste à dire que l'application suivante est bijective : 
+$$\deff{\varphi}{Hom(A,P)}{\prodd{i\in I}{} Hom(A, A_i)}{f:A \rightarrow P}{(\pi_i \circ f : A \rightarrow A_i)_{i \in I}}$$
+\end{remarque}
+
+%% Subsubsection : Algèbre de Polynômes
+\subsubsection{Anneaux de polynômes à coefficients dans un anneau commutatif}
+Soit $A$ un anneau commutatif. L'ensemble $A^{\N}$ des suites dans $A$ est un anneau produit (par ce qu'il y a plus haut).
+Par contre l'ensemble des suites finies  $A^{(\N)}$ n'a pas une structure d'anneau naturelle. Mais on peut lui en donner une : \\
+
+Pour $n$ dans $\N$, on note $e_n \in A^{(\N)}$ le $n$-ième élément de la base canonique. On prend donc $e_n(m) := \delta_{n,m}$. \\
+Avec cette base, toute suite $(a(n))_n$ de $A^{(\N)}$ se décompose en : $a = \summ{n=1}{\infty}a(n)e_n = \summ{n \in Supp(a)}{} a(n)e_n $. \\
+
+% Remarque
+\begin{remarque}
+Voici un tableau récapitulant l'ensemble d'appartenance de chaque variable. Celui-ci permet de bien comprendre les notations utilisées. \\
+
+\begin{tabular}{cc}
+\begin{tabular}{|c|c|c|}
+\hline
+${A^{(\N)}}^{\N}$    &    $A^{(\N)}$   &   $A$ \\
+\hline
+$e$ & $e_n$ & $e_n(i)$ \\
+\hline
+      & $x$     & $x(i)$    \\
+\hline
+\end{tabular} &
+Où ${A^{(\N)}}^{\N}$ et une suite de suites finies indexée par $\N$. \\
+\end{tabular}
+
+\vspace{0.3cm}
+
+Avec ça, on peut donner à $A^{(\N)}$ une structure d'anneau commutatif en posant :
+\begin{itemize}
+\item $0 := (0,0, \ldots)$
+\item $ 1 := (1, 0, \ldots)$
+\item $\summ{}{}u(n)e_n + \summ{}{}v(n)e_n = \summ{}{}(u(n)+v(n))e_n$
+\item $\summ{}{}u(n)e_n \times \summ{}{}v(n)e_n = \summ{n=0}{\infty} \left( \summ{i+j=n}{}u(i)v(j)  \right) e_n $
+\end{itemize}
+
+Cet anneau $(A^{(\N)}, +, \times)$ est noté $A[X]$. \\
+On pose en fait $e_1 = X$. Par construction de la multiplication dans $A^{(N)}$, on a : $e_n \times e_m = e_{n+m}$. Ce qui donne $e_n = X^n$\\
+Ainsi, pour tout $a$ dans $A^{(N)}$, la décomposition devient : $ a = \summ{n=0}{\infty} a(n)X^n$. \\
+On comprend tout de suite mieux le terme "d'anneau de polynômes" (à valeurs dans $\N$, donc)...
+\end{remarque}
+
+\vspace{0.5cm}
+
+\textbf{Algèbres de polynômes sur un monoïde quelconque}\\
+On peut généraliser la construction précédente en remplaçant $\N$ par un monoïde quelconque.\\
+Soit $(N, \cdot)$ un monoïde, on note $A^{(N)}$ l'ensemble $\{f : N \rightarrow A \; | \; f \textnormal{ est à support fini} \}$. \\
+On prend ensuite la base (non-dénombrable \textit{a priori}) de $A^{(N)}$ : $e_x(y) := \delta_{x,y} \in A$, avec $x$ et $y$ dans $N$. \\
+
+Avec ça, on définit donc l'anneau $(A^{(N)}, +, \times) = A[N]$ de manière analogue à plus haut :
+
+\begin{itemize}
+\item $0 := x \mapsto 0_A$, $\forall x \in N$ 
+\item $ 1 := x \mapsto \delta_{0_A,x} = e_{0_N}$
+\item $\summ{N}{}u(x)e_x + \summ{N}{}v(x)e_x = \summ{N}{}(u(x)+v(x))e_x$
+\item $\summ{N}{}u(x)e_x \times \summ{N}{}v(x)e_x = \summ{x \in N}{} \left( \summ{i+j=x}{}u(i)v(j)  \right) e_x $
+\end{itemize}
+
+Quelques cas particuliers : \\
+– $N = \N$. On retrouve juste l'anneau $A[X]$. \\
+– $N = \Z$. On obtient l'anneau des polynômes de Laurent : $A[X, X^{-1}]$. \\
+– $N = \N^n$. On obtient l'anneau des polynômes à plusieurs variables : $A[X_1, \ldots, X_n]$. \\
+
+
+%% Subsubsection : Anneaux engendrés par une partie 
+\subsubsection{Anneaux engendrés par un partie}
+
+% Proposition
+\begin{proposition}
+Soit $A$ un anneau et $(A_i) \in A_I$ une famille de sous-anneaux. Alors le produit $\capp{i \in I}{} A_i \subset A$ est encore un sous-anneau de $A$.
+\end{proposition}
+
+% Sous anneaux engendrés
+\begin{definition}[Sous-anneau engendré par une partie]
+Soit $A$ un anneau et $X \subset A$. Il existe un unique sous-anneau de $A$ contenant $X$ et minimal pour l’inclusion, noté $<X>$. On l’appelle \textit{sous-anneau engendré} par $X$. \\
+On a l’égalité formelle : $<X> = \capp{\underset{X \subset A}{A’ sous-anneaux}}{} A’$. \\
+
+\textit{Remarques :}
+\begin{itemize}
+\item On peut aussi définir $<X>$ comme étant l’ensemble des éléments qui sont somme finie de produits finis d’éléments de $X$.
+\item Si on a $<X> = A$, on dit que $X$ est un système de générateurs de $A$ comme anneau (ou encore que $A$ est engendré par $X$).
+\item Lorsque les éléments de $<X>$ commutent deux à deux, on note parfois $<X> = \Z[X]$.
+\end{itemize}
+
+Il est à noter que toute cette construction serait aussi valide en remplaçant l’anneau $A$ par une $A$-algèbre.
+\end{definition}
+
+% Définition : Sous algèbres
+\begin{definition}[Sous $A$-algèbre]
+Soit $\varphi : A \rightarrow B$ une $A$-algèbre.\\
+Une sous-algèbre est un sous-anneau $B’ \subset B$ tel que $im(\varphi) \subset B’$. \\
+Implicitement, on munit $B’$ de la structure de $A$-algèbre : $\varphi_{|A’} : A \rightarrow B’$.
+\end{definition}
+
+% Proposition
+\begin{proposition}
+Une intersection de sous-algèbres est une sous-algèbre.
+\end{proposition}
+
+\begin{definition}[Sous-algèbre engendrée par une partie]
+Soit $\varphi : A \rightarrow B$, une $A$-algèbre et soit $X \subset B$. \\
+Il existe une unique sous-$A$-algèbre de $B$ contenant $X$ et minimale pour l’inclusion, notée $<X>_A$. \\
+On a (encore) l’égalité formelle : $<X>_A = \capp{\underset{X \subset B'}{B \textrm{ sous-$A$-alg}}}{} B’ = \; <im \varphi \cup X>$. \\  
+
+\begin{itemize}
+\item Si $<X>_A = B$, on dit que $X$ est un système de générateur de $B$ comme $A$-algèbre, ou encore que $X$ engendre $B$.
+\item S’il existe une partie finie engendrant $B$, on dit que $B$ une $A$-algèbre de type fini sur $A$.
+\item Lorsque les éléments de X commutent deux à deux, on note en général $<X>_A = A[X] \subset B$.
+\end{itemize}
+\end{definition}
+
+\vspace{0.3cm}
+ 
+
+%% Subsection : Idéaux et Quotients
+\subsection{Idéaux et quotients}
+
+% Définition Ideal
+\begin{definition}[Idéal]
+Soit $A$ un anneau. On dit que $I \subset A$ est un idéal de $A$ s’il vérifie les propriétés suivantes :
+
+\begin{itemize}
+\item $(I, +)$ est un sous-groupe de $A$.
+\item $I$ est stable par multiplication sur $A$ : $\forall i \in I, a \in A$, \tq $i \times a \in I$.
+\end{itemize}
+\end{definition}
+
+% Remarque
+\begin{remarque}
+Un idéal $I$ est un sous-anneau de $A$ si et seulement si ou a $I=A$.
+\end{remarque}
+
+% Exemple
+\begin{exemple} \NL
+\begin{itemize}
+\item Le singleton $\{0\}$ et $A$ sont des idéaux de $A$.
+\item Les idéaux de $\Z$ sont les  $n \Z$.
+\end{itemize}
+\end{exemple}
+
+% Définition
+\begin{definition}[Idéal principal]
+Soit $A$ un anneau et $a \in A$. \\
+Les ensembles de la forme $aA$ sont des idéaux, notés $<\!a\!>$ ou encore $(a)$ et appelés \textit{idéaux principaux}. \\
+
+On dit qu'un anneau est principal si tous ses idéaux sont principaux.
+\end{definition}
+
+\textit{Exemples :}
+\begin{itemize}
+\item $k[X]$ et $\Z$ sont des anneaux principaux. \\
+\item Les corps commutatif sont aussi principaux, en tant qu'anneaux. \\
+\item L'anneau $k[X,Y]$ n'est pas principal.
+\end{itemize}
+
+% Proposition
+\begin{proposition}
+Soit $(A_i)_{i \in I}$ une famille d'anneaux et $(I_i)_{i \in I}$ une famille d'idéaux avec $I_i \subset A_i$, pour tout $i$. \\
+Alors $\prodd{i \in I}{} I_i$ est un idéal de $\prodd{i \in I}{} A_i$.
+\end{proposition}
+
+\textit{Contre-exemple :} $A_{(I)} \subset A_I$ est un idéal mais n'est pas produit d'idéaux de $A$. \\
+
+% Proposition
+\begin{proposition}
+Soit $I \subset A$ un idéal. \\
+Alors $I[X] = \{ aP \;|\; a\in I, P \in A[X] \}$ est un idéal de $A[X]$.
+\end{proposition}
+
+
+% Proposition
+\begin{proposition}
+Soit $\varphi : A \rightarrow B$ un morphisme d'anneaux. \\
+Alors, pour tout idéal $J$ de $B$, $\varphi^{-1}(J)$ est un idéal de $A$.
+\end{proposition}
+
+
+\begin{remarque}
+L'image direct d'un idéal par $\varphi$ n'est pas un idéal \textit{a priori}. Ça l'est cependant si $\varphi$ est surjective.
+\end{remarque}
+
+% Notation
+\begin{notation}
+On note $\cali{I}_A$ l'ensemble des idéaux de $A$. \\
+Soit $I \in \cali{I}_A$, on note $V^{tot}(I) := \{ J \in \cali{I}_A \;|\; I \subset J \}$.
+\end{notation}
+
+% Proposition
+\begin{proposition}
+L'intersection d'idéaux est un idéal.
+\end{proposition}
+
+
+% Définition
+\begin{definition}[Idéal engendré par une partie]
+Soit $X \subset A$. Il existe un unique idéal contenant $X$ et minimal pour l'inclusion, noté $(X)_A$ et appelé \textit{idéal engendré} par $X$. \\
+
+On note aussi : $(A) = \summ{x \in X}{} xA$
+\end{definition}
+
+% Définition
+\begin{definition}[Somme d'idéaux]
+Soit $\cali{I} \subset \cali{I}_A$ une famille d'idéaux de $A$. \\
+On note $(\cupp{I \in \cali{I}}{} I)_A = \summ{I \in \cali{I}}{} I$ ce qu'on appelle la somme des idéaux éléments de $\cali{I}$.
+
+Pour un certain idéal $I$ et une partie $X$ de $A$, si on a $I = \summ{x \in X}{} xA$, on dit que $I$ est engendré par $X$ en tant qu'idéal. 
+Si de plus $X$ est fini, on dit que $D$ est un idéal de type fini. \\
+\end{definition}
+
+
+% Exemple
+\begin{exemple}\NL
+\begin{itemize}
+\item $A^{(\N)} \subset A^{\N}$ n'est pas un idéal de type fini.
+\item Tous les idéaux de $k[X_1, \ldots , X_n]$ sont de type fini (par transfert de noethérianité).
+\item Si $k \rightarrow A$ est une $k$-algèbre de type fini, tous ses idéaux sont de type fini.
+\end{itemize}
+\end{exemple}
+
+% Remarque
+\begin{remarque}
+Un anneau dont tous les idéaux sont de type fini est dit \textit{noethérien}.
+\end{remarque}
+
+
+% Proposition
+\begin{proposition}
+Soit $(I_k)_{k \leq n}$ une famille finie d'idéaux. Alors :
+\begin{itemize}
+\item $\capp{k = 1}{n} I_k$ est un idéal. \\
+\item $\summ{k = 1}{n} I_k$ est un idéal. \\
+\item $\prodd{k = 1}{n} I_k = \summ{\underset{a_k \in I_k}{1 \leq k \leq n}}{} a_k A$ est un idéal. \\
+\item On a les relations d'inclusion : $\prodd{}{}I_k \;\subset\; \capp{}{}I_k \;\subset\; I_k \;\subset\; \summ{}{}I_k $.
+\end{itemize}
+\end{proposition}
+
+%% Subsubsection : Aneaux Quotients
+\subsubsection{Anneaux quotients}
+Le noyau d'un morphisme d'anneau est un idéal. Inversement, tout idéal $I \subset A$ est le noyau d'un morphisme d'anneau particulier.\\
+Un idéal $I \subset A$ étant en particulier un sous-groupe de $A$, on dispose de la projection canonique : \\
+$$ \deff{\pi_I}{A}{A/I}{a}{\overline{a}=a+I}$$ 
+Lequel est un morphisme surjectif de groupes abéliens et de noyau égal à $I$. \\
+
+On peut munir $A/I$ d'une structure d'anneau (nécessairement unique) telle que l'application $\pi_I A \rightarrow A/I$ devienne un morphisme d'anneaux. \\
+Concrètement, on veut avoir : $\overline{ab} = \pi_I(ab) = \pi_I(a) \cdot \pi_I(b) = \overline{a} \overline{b}$. \\
+
+Il faut en fait vérifier que la valeur de $\overline{ab}$ ne dépende pas du choix des représentants, ou encore que $deff{}{A \times A}{A/I}{(a,b)}{\overline{ab}}$ se factorise en : \\
+
+\begin{tikzcd}
+A \times A \arrow[r, "{(a,b) \mapsto \overline{ab}}"] \arrow[d, "\overline{\cdot} \times \overline{\cdot} \;\;"'] & A/I \\
+A/I \times A/I \arrow[ru, "{(\overline{a},\overline{b}) \mapsto \overline{a}\overline{b}}"', dashed]              &    
+\end{tikzcd}
+
+On vérifie ensuite facilement que $(A/I, +, \times)$ ainsi défini est bien un anneau commutatif. \\
+
+% Lemme
+\begin{lemme}[Propriété universelle du quotient]
+Pour tout idéal $I \subset A$, il existe un morphisme d'anneaux $p : A \longrightarrow Q$ tel que pour tout morphisme $\varphi : A \longrightarrow B$ avec  $I \subset ker(\varphi)$, il existe un unique morphisme d'anneaux $\overline{\varphi} : Q \longrightarrow B$ tel que $\overline{\varphi} \circ p = \varphi$.
+\end{lemme}
+
+
+\paragraph{Réécriture}
+Pour tout anneau $B$, l'application $\deff{}{Hom(A/I,B)}{ \{A \overset{\varphi}{\rightarrow} B \; | \;  I \subset ker\varphi \}}{f}{\overset{\sim}{f} \circ \pi_I} $. \\
+
+\paragraph{Exemple :}
+Soit $A$ un anneau. On a un unique morphisme d'anneaux appelé  \textit{caractéristique de $A$}, défini par : \\
+$$ \deff{c_A}{\Z}{A}{1}{1_A}$$
+Ce morphisme envoie donc $n \in \Z$ sur $n 1_A$. \\
+$ker c_A \subset \Z$ est un idéal de $\Z$, donc il existe $n_A \in \Z$ tel que $ker c_A = n_A \Z$. On dit $n_A$ est la caractéristique de $A$. (On sait que $n_A$ est unique car les idéaux de $\Z$  sont principaux). \\
+
+\begin{tikzcd}
+\mathbb{Z} \arrow[r, "c_A"] \arrow[d, "\pi"']                         & A \\
+\mathbb{Z}/n_A \mathbb{Z} \arrow[ru, "\overline{c_A}"', dashed, hook] &  
+\end{tikzcd}
+
+De plus, si $A$ est de caractéristique $n$, le morphisme $\overline{c_A}$ munit $A$ d'une structure de $\Z/n_A \Z$-algèbre. \\
+
+
+% Exemples
+\begin{exemple}\NL
+\begin{tabular}{|c|c|c|}
+\hline
+$0$ & $p$ & $n$ \\
+\hline
+$\Z$ & $\Z/p\Z, \tq p \textrm{ premier}$ & $\Z/n\Z, \tq n \in \N$ \\
+\hline
+$\Q$ &&\\
+\hline
+$\R$ &&\\
+\hline
+$\C$ &&\\
+\hline
+\end{tabular}
+\end{exemple}
+
+% Proposition
+\begin{proposition}
+Soit $A$ un anneau et $B$ un sous-anneau de $A$. Alors $A$ et $B$ ont même caractéristique. \\
+En particulier, $A$, $A[X]$ et $A^I$ ont même caractéristique.
+\end{proposition}
+
+
+% Lemme
+\begin{lemme}
+Soit $A$ un anneau, et $i \subset A$ un idéal. \\
+La projection canonique $\pi_I A \rightarrow A/I$ induit une bijection préservant l'inclusion. C'est à dire que les ensembles $\{\textrm{idéaux de } A/I \}$ et $\{\textit{idéaux de $A$ contenant} I \}$ sont isomorphes.
+\end{lemme}
+
+% Lemme Chinois
+\begin{lemme}[Restes chinois]
+Soit $A$ un anneau, et soit $I_1, \cdots, I_r$ une suite d'idéaux de $A$. \\
+On suppose que ces idéaux sont co-maximaux, c'est à dire : $I_i + I_j = A$, $1 \leq i+j \leq r$. \\
+Alors, on a : $\capp{1}{r} I_i = I_1 \times \cdots \times I_r$, et le morphisme d'injection $A \rightarrow \prodd{1}{r} A/I_i$ est surjectif. \\
+
+Réciproquement, sur le morphisme d'injection est surjectif, alors les $(I_i)$ sont co-maximaux.
+\end{lemme}
+
+\begin{exemple}
+$\Z/6 \Z$ est isomorphe à $\Z/2 \Z \times \Z/3 \Z$. 
+\end{exemple}
+
+%% Subsubsection : Classification grossière des idéaux
+\subsubsection{Classification grossière des idéaux}
+
+Afin de bien comprendre les liens entre les différents types d'anneaux et d'idéaux, il peut être utile d'apprendre le schéma suivant : \\
+
+ \begin{tabular}{rccccc}
+idéal : & maximal & $\Longrightarrow$ & premier & $\Longrightarrow$ & radiciel \\
+& $\Updownarrow$ &&  $\Updownarrow$  && $\Updownarrow$  \\ 
+anneau quotient : & corps & $\Longrightarrow$ & intègre & $\Longrightarrow$ & réduit \\
+\end{tabular}
+
+%% SUBSUBSECTION
+\subsubsection{Corps et idéaux maximaux}
+
+% Lemme
+\begin{lemme}
+Soit $A$ un anneau,  et $I$ un idéal propre de $A$. Les assertions suivantes sont équivalentes :
+\begin{itemize}
+\item $A/I$ est un corps.
+\item $I$ est maximal pour l'inclusion parmi les idéaux propres de $A$.
+\end{itemize}
+\end{lemme}
+
+% Lemme
+\begin{lemme}
+Pour tout idéal propre $I$ de $A$, il existe un idéal maximal $M$ tel que $I$ soit inclut dans $M$.\\
+
+\textit{Remarque :} Ceci se démontre avec un équivalent de l'axiome du choix.
+\end{lemme}
+
+
+% Lemme de Zorn
+\begin{lemme}[Zorn]
+On dit qu'un ensemble ordonné est dit \textit{inductif} si toute suite croissante de sous-ensembles admet un majorant.\\
+
+Tout ensemble ordonné inductif non vide admet un élément maximal.
+\end{lemme}
+
+
+% Notation
+\paragraph{Notation :}
+L'ensemble des idéaux maximaux d'un anneau $A$ est appelé \textit{spectre maximal de $A$}, et est noté $Spm(A)$. \\
+
+\begin{exemple}\NL
+\begin{itemize}
+\item $Spm(\Z) = \{p \Z \;|\; p \textrm{ premier} \}$.
+\item $Spm(\set{K}) = \{ \set{K}^{i-1} \times \{0\} \times \set{K}^{n-i} \;|\; i \in \inter{0,n} \}$
+\end{itemize}
+\end{exemple}
+
+% Lemme de Kroll
+\begin{lemme}[Kroll]
+Soit $A$ un anneau non nul, et soit $I$ un idéal de $A$. \\
+Il existe un idéal maximal $M$ de $A$ qui contient $I$. \\
+Ce lemme peut se résumer par la formule :
+$$ A \neq \{0\} \Longleftrightarrow Spm(A) \neq \emptyset $$
+\end{lemme}
+
+% Définition : Radical de Jacobson
+\begin{definition}[Radical de Jacobson]
+Soit $A$ un anneau. Pour tout idéal $M \in Spm(A)$, on a la projection canonique $\pi_M : A \longrightarrow A/M$. \\
+De plus, en notant :
+
+$$ \deff{P_{max}}{A}{\prodd{M \in Spm(A)}{} A/M}{a}{( P_M(a))_{M \in Spm(A)}}$$
+
+On a, par le lemme de factorisation : \\
+
+\begin{tikzcd}
+A \arrow[r, "P_{max}"] \arrow[d, "\pi_M"'] & \prodd{M \in Spm(A)}{} A/M \\
+A/J_A \arrow[ru, "\overline{P}_{max}"']    &                         
+\end{tikzcd}
+
+Où $J_A := ker(P_{max})$ est appelé le \textit{radical de Jacobson} de $A$.
+\end{definition}
+
+%% SUBSUBSECTION
+\subsubsection{Anneaux intègres et idéaux premiers}
+
+% Définition : élément de torsion
+\begin{definition}[Élément de torsion]
+Soit $A$ un anneau. On dit que $a \in A$ est un \textit{élément de torsion} s'il existe $b \in A$, tel que $ab=0$. \\
+On note $A_{tors} \subset A$ le sous ensemble des éléments de torsion de $A$.
+\end{definition}
+
+% Définition : Anneau intègre
+\begin{definition}[Anneau intègre]
+On dit qu'un anneau $A$ est intègre si $A_{tors} = \{0\}$.
+\end{definition}
+
+\begin{exemple}\NL
+\begin{itemize}
+\item $\Z$ est intègre. 
+\item Les corps commutatifs sont intègres.
+\item Si $A$ est intègre, alors $A[X_1, \ldots, X_n]$ l'est aussi.
+\item $\Z/p\Z$ est intègre si et seulement si $p$ est premier.
+\item Soient $A$, $B$ des anneaux. $A \times B$ muni de la loi produit usuelle n'est jamais intègre. En effet, on a toujours : \\
+$(1_A, 0_B) \cdot (0_A, 1_B) = (0_A, 0_B)$
+\end{itemize}
+\end{exemple}
+
+% Lemme
+\begin{lemme}
+Soit $A$ un anneau, et $I$ un idéal propre de $A$. Les propositions suivantes sont équivalentes :
+\begin{itemize}
+\item $A/I$ est intègre.
+\item $\forall a,b, \in A, \tq ab \in I \Longrightarrow (a \in I) \textrm{ ou } (b \in I)$.
+\end{itemize}
+\end{lemme}
+
+% Définition : Idéal premier
+\begin{definition}[Idéal premier]
+On dit qu'un idéal $I$ est premier s'il vérifie les conditions du lemme ci-dessus. On note $Spec(A)$ l'ensemble des idéaux premiers de $A$, appelé \textit{spectre de $A$}. \\
+
+Comme pour les idéaux maximaux, on dispose du produit des projections canoniques :
+$$ \deff{P_{prem}}{A}{\prodd{\rho \in Spec(A)}{} A/\rho}{a}{(\pi_\rho(a))_{\rho \in Spec(A)}} $$
+
+C'est un morphisme d'anneaux dont le noyau est :
+$$ R_A = ker(P_{prem}) = \capp{\rho \in Spec(A)}{} \rho $$
+
+Où $R_A$ est appelé le \textit{radical} de $A$.
+\end{definition}
+
+% Remarque
+\begin{remarque}
+Pour $A$ un anneau, on a les inclusions : \\
+$Spm(A) \subset Spec(A)$, et $R_A \subset J_A$. 
+\end{remarque}
+
+% Proposition
+\begin{proposition}
+Soit $A$ un anneau et soit $I$ un idéal premier de $A$. Alors on a une bijection entre l'ensemble des idéaux premiers de $A/I$ et l'ensemble des idéaux de $A$ qui contiennent $I$.\\
+Formellement :
+$$ Spec(A/I) \simeq \{J \in Spec(A) \;|\; I \subset J \}$$
+\end{proposition}
+
+% Définition : Nilpotence et nilradical
+\begin{definition}[Nilpotence et nilradical]
+On dit qu'un élément $x$ de $A$ est \textit{nilpotent} s'il existe un entier $n \geq 1$ tel qu'on ait : $x^n = 0$. \\
+On appelle \textit{indice de nilpotence} le plus petit $n$ vérifiant cette propriété. \\
+
+L'ensemble $\cali{N}_A := \{a \in A \;|\; a \textrm{ est nilpotent} \}$ est appelé \textit{nilradical} de $A$. \\
+$\cali{N}_A$ est un idéal de $A$, et on a l'égalité ensembliste : $\cali{N}_A = R_A$.
+\end{definition}
+
+
+%% SUBSUBSECTION
+\subsubsection{Anneaux réduits et anneaux radiciels}
+
+% Définition : Anneau réduit
+\begin{definition}[Anneau réduit]
+On dit qu'un anneau $A$ est réduit si $R_A = \cali{N}(A) = \{0\}$. \\
+C'est à dire si on a :
+$$ \forall a \in A, \forall n \geq 1, \tq a^n=0 \Longrightarrow a=0 $$ 
+
+Autrement dit, un anneau est réduit s'il n'a pas d'élément nilpotent non nul.
+\end{definition}
+
+% Définition : Radical d'un anneau
+\begin{definition}[Radical d'un anneau]
+Soit $A$ un anneau, et soit $I$ un idéal de $A$. \\
+On appelle \textit{radical} de $I$ l'ensemble $\sqrt{I} := \pi_I^{-1}(\cali{N}_{A/I})$.  \\ De manière \--- beaucoup \--- plus explicite, on a :
+
+$$ \sqrt{I} = \{ a \in A \;|\; \exists n \geq 1, \tq a^n \in I \} $$
+
+De plus, on a toujours l'inclusion : $ I \subset \sqrt{I}$.
+\end{definition}
+
+% Lemme
+\begin{lemme}
+Soit $A$ un anneau, et $I$ un idéal de $A$. Alors : \\
+$$ I = \sqrt{I} \Longleftrightarrow A/I \textrm{ est réduit}$$ 
+\end{lemme}
+
+\begin{exemple}\NL
+\begin{itemize}
+\item $\Z/4\Z$ n'est pas réduit, car $\cali{N}_{\Z/4\Z} = \{ \overline{0}, \overline{2} \}$. 
+\item $\Z/6\Z$ est réduit mais pas intègre. En effet, on a : $\overline{2} \cdot \overline{3} = \overline{0}$
+\end{itemize}
+\end{exemple}
+
+% Proposition
+\begin{proposition}
+Soit $(A_n)$ une suite d'anneaux réduits. L'anneau produit $\prod{}{} A_n$ est alors aussi un anneau réduit.
+\end{proposition}
+
+
+% SUBSECTION : ANNEAUX NOETHERIENS
+\subsection{Anneaux Noethériens}
+
+% Définition : Anneau noethérien
+\begin{definition}[Anneau noethérien]
+Soit $A$ un anneau. Les assertions suivantes sont équivalentes :
+\begin{itemize}
+\item Tout idéal de $A$ est de type fini (\textit{i.e.} engendré par un nombre fini d'éléments).
+\item Toute suite croissantes d'idéaux de $A$ est stationnaire à partir d'un certain rang.
+\item Tout ensemble $X$ 	non-vide d'idéaux admet un élément maximal dans $X$ (lequel n'est pas nécessairement maximal dans $A$).
+\end{itemize}
+
+Si un anneau vérifie ces propriétés, on dit qu'il est \textit{noethérien}.
+\end{definition}
+
+% Exemple
+\begin{exemple}
+Les anneaux principaux et les corps sont noethériens.
+\end{exemple}
+
+% Proposition : Transfert de noethérianité
+\begin{proposition}
+Soit $A$ un anneau noethérien. Alors $A[X]$ est aussi noethérien.
+\end{proposition}
+
+% Corollaire
+\begin{corollaire}
+Soit $A$ un anneau noethérien. Alors toute $A$-algèbre de type fini est noethérienne.
+\end{corollaire}
+
+% Corollaire
+\begin{corollaire}
+Soit $A$ un anneau noethérien. Alors toute $A[X_1, \ldots, X_n]$ est noethérien, pour tout $n$.
+\end{corollaire}
+
+\begin{remarque}
+Si $B$ est une $A$-algèbre de type fini, alors $B$ est isomorphe à un quotient $A[X_1, \ldots, X_n]/I$.
+\end{remarque}
+
+
+% Définition : Anneau artinien
+\begin{definition}[Anneau artinien]
+Soit $A$ un anneau. On dit que $A$ est \textit{artinien} si toute suite décroissante d'idéaux de $A$ est stationnaire à partir d'un certain rang.
+\end{definition}
+
+\begin{exemple}\NL
+\begin{itemize}
+\item Les corps sont artiniens.
+\item $\Z$ n'est pas artinien. En effet, la suite d'idéaux $(2^{n}\Z)_n$ est décroissante pour l'inclusion mais jamais stationnaire.
+\end{itemize}
+\end{exemple}
+
+
+
+
+% SUBSECTION : ANNEAUX EUCLIDIENS, PRINCIPAUX ET FACTORIELS
+\subsection{Anneaux euclidiens, principaux et factoriels}
+
+% SUBSUBSECTION
+\subsubsection{Anneaux euclidiens et principaux}
+
+% Définition : Anneau euclidien
+\begin{definition}[Anneau euclidien]
+Soit $A$ un anneau intègre. On dit que $A$ est \textit{euclidien} s'il existe une application $\sigma : A\noset{0} \longrightarrow \N$, appelée \textit{stathme euclidien} et vérifiant la propriété suivante :
+$$ \forall a \in A, \forall s \in A \noset{0}, \exists q,r \in A, \tq   \left \{ \begin{array}{l} b = aq + r \\ r = 0 \textrm{ ou } \sigma(r) < \sigma(s) \end{array} \right . $$
+Cette propriété traduit le fait que $\sigma$ permette d'effectuer une division euclidienne dans $A$.
+\end{definition}
+
+% Exemple
+\begin{exemple}\NL
+\begin{itemize}
+\item $A = \Z$, $\sigma(a) = |a|$.
+\item $A = \Z$, $\sigma(a) = f(|a|)$, où $f : \N \longrightarrow \N$ est une fonction strictement croissante.
+\item $A = \R[X]$, $\sigma(P) = deg(P)$
+\end{itemize}
+\end{exemple}
+
+% Définition : Anneau principal
+\begin{definition}[Anneau principal]
+On dit qu'un anneau intègre est \textit{principal} si et seulement si tous ses idéaux sont principaux.
+\end{definition}
+
+% Lemme
+\begin{lemme}
+Tout anneau euclidien est principal.
+\end{lemme}
+
+% Exemple
+\begin{exemple}
+L'anneau $\Z \left[ \frac{1+i\sqrt{19}}{2} \right]$ est principal mais n'est pas euclidien.
+\end{exemple}
+
+% Lemme
+\begin{lemme}
+Soit $A$ un anneau intègre. Soient $B$, $P \in A[X]$, avec $B \neq 0$ et tel que $\cali{C_D}(B) \in A^{\times}$. \\
+Alors, il existe un unique couple $Q$, $R$ dans $A[X]$ tel qu'on ait :
+
+$$   \left \{    \begin{array}{l} P = BQ +R \\ R = 0 \textrm{ ou } deg(R) < deg(B) \end{array} \right . $$
+\end{lemme}
+
+\begin{remarque}
+Si $A$ n'est pas intègre, on a quand même l'existence d'une telle décomposition. Celle-ci n'est cependant pas unique \textit{a priori}.
+\end{remarque}
+
+% Lemme
+\begin{lemme}
+Soit $A$ un anneau principal. Alors $Spec(A) = Spm(A)$.
+\end{lemme}
+
+%% Subsubsection : Anneaux factoriels
+\subsubsection{Anneaux factoriels}
+
+%% Définition : élément irréductible
+\begin{definition}[Élément irréductible]
+Soit $A$ un anneau intègre. On dit qu'un élément $p \in A\noset{A^{\times}}$ est irréductible s'il vérifie la propriété suivante :
+$$ a,b \in A, \tq ab=p \Longrightarrow a  \in A^{\times} $$ 
+On note $\cali{P}_A^0$ l'ensemble des éléments irréductibles de $A$.
+\end{definition}
+
+% Remarque
+\begin{remarque}
+Puisque $A$ est intègre, on a :
+$$ \forall a,b, \in A,  \tq Aa = Ab \Longleftrightarrow A^{\times}a = A^{\times}b$$
+Cela nous permet de définir une relation d'équivalence sur $\cali{P}_A^0$. \\
+En pratique, on notera toujours $\cali{P}_A$ un système de représentation de  $\cali{P}_A^0$ par cette relation d'équivalence.
+\end{remarque}
+
+
+% Exemples
+\begin{exemple}\NL
+Si $A = \Z$, on a : $\cali{P}_\Z^0 = \{ \pm p \;|\; p \textrm{ premier } \}$
+\end{exemple}
+
+% Théorème : Critère d'Eisenstein
+\begin{theoreme}[Théorème d'Eisenstein]
+Soit $A$ un anneau factoriel. On pose $K := Frac(A)$ le corps des fractions de $A$. \\
+Soit $P := \summ{k \geq 0}{n} a_kX^k \in A[X]$.\\
+
+Si il existe $p \in \cali{P}_A^0$ tel que :
+\begin{itemize}
+\item $p$ divise $a_i$, pour tout $0 \leq i \leq n-1$ 
+\item $p$ ne divise pas $a_n$
+\item $p$ ne divise pas ${a_0}^2$
+\end{itemize}
+Alors $P$ est irréductible dans $K[X]$.
+\end{theoreme}
+
+% Remarque
+\begin{remarque}
+Soit $P$ dans $K[X]$. La proposition suivante est utile lorsque que l'on veut appliquer le critère d'Eisenstein : \\
+$P$ irréductible $\Longleftrightarrow$ $P(X+\mu)$ est irréductible, pour tout $\mu \in K$
+\end{remarque}
+
+%Théorème : Critère de réduction
+\begin{theoreme}[Critère de réduction]
+Soient $A$, $B$ deux anneaux intègres. On note $K$ et $L$ leur corps des fractions respectifs. \\
+Soit $\varphi : A \longrightarrow B$ un morphisme d'anneaux. \\
+La propriété universelle de $A[X]$ donne un unique morphisme $\overset{\sim}{\varphi}$ de $A$-algèbres :
+
+\begin{tabular}{cc}
+\\
+\begin{tikzcd}
+A \arrow[r, "\varphi"] \arrow[d]                           & B \arrow[d] \\
+{A[X]} \arrow[r, "\overset{\sim}{\varphi} : X \mapsto X"'] & {B[X]}     
+\end{tikzcd}&
+
+Avec : $\overset{\sim}{\varphi}(\summ{n}{}a_nX^n) = \summ{n}{}\varphi(a_n)X^n$
+\\
+\end{tabular}
+
+Soit $P \in A[X]$ tel que $\overset{\sim}{\varphi}(P)$ est irréductible dans $L[X]$ et tel que $deg (\overset{\sim}{\varphi}(P)) = deg(P)$ \\
+
+Alors $P$ ne peut pas s'écrire sous la forme $P=P_1P_2$ avec $P_1,P_2 \in A[X]$ et avec $deg(P_1), deg(P_2) \geq 1$
+\end{theoreme}
+
+% Remarque
+\begin{remarque}
+En général, on applique ce critère avec $\varphi = \pi_I : A \longrightarrow A/I$, où $I$ est un idéal bien choisi.
+\end{remarque}
+
+% Définition : élément premier
+\begin{definition}[Élément premier]
+Soit $A$ un anneau. Un élément $p$ de $A\nozero$ est dit \textit{premier} si l'idéal $pA$ est premier. \\
+On note $\cali{P}_A^{\dagger}$ l'ensemble des éléments de $A$.
+\end{definition}
+
+% Lemme
+\begin{lemme}
+Tout élément premier d'un anneau $A$ est irréductible. \\
+C'est à dire : $\cali{P}_A^{\dagger} \subset \cali{P}_A^{0}$ \\
+
+L'inclusion est stricte en général.
+\end{lemme}
+
+% Exemple
+\begin{exemple}
+On pose $A = \Z[i\sqrt5]$. \\
+Dans $A$, on a : $6 = 2 \times 3  = (1+i\sqrt5)(1 - i\sqrt5)$ \\
+
+$2$ et $1+i\sqrt5$ sont irréductibles mais $2$ n'est pas premier car $1+i\sqrt5 \notin 2\Z[i\sqrt5]$
+\end{exemple}
+
+% Définition : Anneau factoriel
+\begin{definition}[Anneau factoriel]
+On dit qu'un anneau intègre $A$ est \textit{factoriel} si pour tout système de représentants $\cali{P}_A$ de $\cali{P}_A^0 \backslash \!\! \sim$ et pour toute fonction de valuation $\nu : \cali{P}_A \longrightarrow \N$, l'application :
+$$ \deff{}{A^{\times} \times \N^{(\cali{P}_A)}}{A\nozero}{(u, \nu)}{u \prodd{p \in \cali{P}_A}{} p^{\nu(p)}}$$\\
+
+En d'autres termes, $A$ est factoriel si tout élément $a$ se décompose de manière unique en :
+$$ a = u_a \prodd{p \in \cali{P}_A}{} p^{\nu_p(a)} $$
+
+Pour cette décomposition, $u_a$ dépend du choix des représentants, mais $\nu$ n'en dépend pas.
+\end{definition}
+
+% Proposition
+\begin{proposition}\NL
+\begin{itemize}
+\item Principal $\Longrightarrow$ Noethérien
+\item Noethérien $+ [\cali{P}_A^{\dagger} = \cali{P}_A^0$] $\Longrightarrow$ Factoriel
+\item Factoriel $+ [Spm(A) = Spec(A)]  \Longrightarrow$ Principal
+\end{itemize}
+\end{proposition}
+
+% Lemme
+\begin{lemme}
+Soit $A$ un anneau noethérien intègre. Alors l'application $\nu$ (telle que définie plus haut) est surjective.
+\end{lemme} 
+
+%% Subsection : Polynômes sur les anneaux factoriels
+\subsection{Polynômes sur les anneaux factoriels}
+
+% Théorème
+\begin{theoreme}[Transfert de factorialité]
+Soit $A$ un anneau factoriel. Alors $A[X]$ est aussi factoriel. \\
+De plus, les irréductibles de $A[X]$ dans $k$ sont les irréductibles de $A$ ainsi que les irréductibles de $k[X]$ de contenu égal à $1$.
+\end{theoreme}
+
+%% Subsubsection : Corps de fractions d'un anneau intègre
+\subsubsection{Corps de fractions d'un anneau intègre}
+
+Il s'agit d'un cas particulier de localisation.
+
+% Définition
+\begin{definition}[Corps des fractions]
+Soit $A$ un anneau intègre. On munit $A\nozero \times A$ de la relation d'équivalence définie par :
+$$ (s,a) \sim (s',a') \Longleftrightarrow sa' = s'a $$
+
+On note alors $Frac(A) :=  (A\nozero \times A) / \sim$, et on définit une opération de division par : 
+$$ \deff{\frac{\;\cdot\;} \cdot}{(A\nozero \times A)}{(A\nozero \times A) / \sim}{(s,a)}{\frac a s}$$ 
+
+On définit maintenant une addition et une multiplication sur $Frac(A)$, avec : \\
+Pour tout $(s,a)$, $(t,b)$ dans $A\nozero \times A$
+\begin{itemize}
+\item $(s,a)+(t,b) := (st, at+sb)$
+\item $(s,a) \cdot (t,b) := (st, ab)$
+\end{itemize} 
+\end{definition}
+
+% Remarque
+\begin{remarque}
+L'application $\deff{\iota_A}{A}{Frac(A)}{a}{\frac a 1}$ est un morphisme d'anneaux de noyau trivial. En particulier, $\iota_A$ est injective. \\
+
+De plus, on remarque que pour tout $\frac a s \in Frac(A)\nozero$, on a que $\frac s a$ est bien défini et appartient aussi à $Frac(A)$.\\
+Autrement dit, $Frac(A)$ est un corps.
+\end{remarque}
+
+% Lemme : Propriété universelle du corps des fractions
+\begin{lemme}[Propriété universelle du corps des fractions d'un anneau intègre]
+Soit $A$ un anneau intègre. Pour tout corps $k$ et pour tout morphisme d'anneaux $f : A \longrightarrow k$, il existe un unique morphisme de corps $\overset{\sim}{f} : Frac(A) \longrightarrow k$, tel que : $f = \iota_A \circ \overset{\sim}{f}$. \\
+\begin{tikzcd}
+A \arrow[r, "f"] \arrow[d, "\iota_A"']                    & k \\
+Frac(A) \arrow[ru, "\exists! \overset{\sim}{f}"', dashed] &  
+\end{tikzcd}
+\end{lemme}
+
+% Exemple
+\begin{exemple}\NL
+\begin{itemize}
+\item $Frac(\Z) = \Q$
+\item $Frac(k) = k$
+\item si $A$ est factoriel, on sait que $A[X]$ est euclidien, et on a alors l'injection : $\deff{\iota_{A[X]}} {A[X]}{Frac(A)[X]}{\sum a_nX^n}{\sum \frac{a_n}{1} X^n} $ 
+\end{itemize}
+Ce dernier exemple est particulièrement utile : il nous dit que pour montrer que $A[X]$ est factoriel, on étudie plutôt $Frac(A)[X]$, qui lui l'est (car euclidien).
+\end{exemple}
+
+%% Subsubsection : Valuations p-adique
+\subsubsection{Valuations $p$-adiques}
+
+% Définition : Valuation p-adique
+\begin{definition}[Valuation $p$-adique]
+Soit $A$ un anneau factoriel. Soit $\iota_A : A \longrightarrow Frac(A)$. \\
+Pour chaque $p \in \cali{P}_A$, on définie la valuation $p$-adique par :
+$$ \deff{\nu_p}{(A\nozero \times A)}{\overline\Z = \Z \cup \{+\infty\}}{(s,a)}{\nu_p(a)-\nu_p(s)} $$
+
+De plus, il existe une unique application $\overset{\nu_p} : Frac(A) \longrightarrow \Z \cup \{+\infty\}$, d'après le théorème de factorisation.
+\end{definition}
+
+% Proposition
+\begin{proposition}
+Les valuations $p$-adiques possèdent les propriétés suivantes :
+\begin{itemize}
+\item $\nu_p(xy) = \nu_p(x)+\nu_p(y)$
+\item $\nu_p(x+y) \geq min(\nu_p(x), \nu_p(y))$
+\item $A^{\times} = \capp{p \in \cali{P}_A}{} \nu_p^{-1}(\{0\})$
+\item $A = \capp{p \in \cali{P}_A}{} \nu_p^{-1}(\overline\Z)$
+\item $\frac a s = u_a u_s^{-1} \prodd{p \in \cali{P}_A}{} p^{\nu_p(a)-\nu_p(s)}$, avec $u_a$, $u_s \in A^{\times}$
+\end{itemize}
+\end{proposition}
+
+%% Subsubsection : Contenu 
+\subsubsection{Contenu}
+
+% Définition : Contenu
+\begin{definition}[Contenu]
+On étend la valuation sur $Frac(A)$ en une valuation $\nu_p : Frac(A)[X] \longrightarrow \overline\Z$. \\
+Avec cela, on définit le \textit{contenu} de $Q \in Frac(A)[X]$ par :
+$$\deff{c_a}{Frac(A)[X]}{Frac(A)}{Q}{\prodd{p \in \cali{P}_A}{} p^{\nu_p(Q)}}$$
+$c_a(Q)$ est bien définie car $Q$ n'a qu'un nombre fini de coefficients non nuls, donc $\nu_p(Q) \neq 0$ que pour un nombre fini d'indices.
+\end{definition}
+
+% Proposition
+\begin{proposition}\NL
+\begin{itemize}
+\item $c_A(Q) \in A \Longleftrightarrow Q \in A[X]$
+\item Pour $a \in A$, on a : $c_A(aQ) = c_A(a) c_A(Q) = u_a^{-1} a c_A(Q)$
+\item Avec la convention $p^\infty = 0$, on a $c_A(Q) = 0 \Longleftrightarrow P = 0$
+\end{itemize}
+\end{proposition}
+
+% Lemme de Gauss
+\begin{lemme}[Gauss]
+Soit $A$ un anneau. On a :
+$$ \forall P,Q \in Frac(A)[X], \tq c_A(PQ) = c_A(P)c_A(Q)$$
+Autrement dit, le contenu est une fonction multiplicative.
+\end{lemme}
+
+% Corollaire
+\begin{corollaire}
+Soit $A$ un anneau factoriel. Alors, les anneaux de la forme $A[X_A, \cdots, X_n]$ sont factoriels.
+\end{corollaire}
+
+%% Subsubsection : Valuations et anneaux factoriels
+\subsubsection{Valuations et anneaux factoriels}
+
+
+
+%% Subsection : Localisation et anneaux de fractions
+\subsection{Localisation et anneaux de fractions}
+
+Soit $K$ un corps. On appelle \textit{valuation} sur $K$ toute application $val : K \rightarrow \Z$ vérifiant les propriétés suivantes : \\
+\begin{itemize}
+\item $\forall x,y \in K, \tq val(xy) = val(x)+val(y)$\\
+\item $\forall x,y \in K, \tq val(x+y) \geq min(val(x),val(y))$\\
+\item $val(x) = \infty \Longleftrightarrow x = 0$ \\
+\end{itemize}
+
+On note $A_v$ le sous-anneau de $K$ défini par : $A_v = \{x \in K \;|\; val(x) \geq 0 \}$. \\
+On note $M_v := val^{-1}(]0, \infty]) = K \backslash K^{\times}$. \\
+
+\vspace{0.5cm}
+
+Soit $A$ un anneau factoriel, et $K := Frac(A)$. \\
+Sur $A$, on a une famille de valuations :
+$$ \cali{V} = \{v_p : K \rightarrow \Z \}, \tq p \in \cali{P}_A$$
+
+Laquelle vérifie :
+\begin{itemize}
+\item $\forall x \neq 0 \in K, \tq \{v \in \cali{V} \;|\; v(x) \neq 0\}$ est fini. \\
+\item $\exists (\cali{P}_v)_{v \in \cali{V}}, \tq v(\cali{P}_v) = \delta_{v,w}$\\`
+\item $A = \bigcap_{v \in \cali{V}} A_v$ \\
+\end{itemize}
+
+% Lemme
+\begin{lemme}
+Soit $K$ un corps muni d'une famille de valuations $\cali{V}$ vérifiant les hypothèses du machin au-dessus. Alors :
+$$ A := \bigcap_{v \in \cali{V}} A_v \subset K$$
+est un anneau factoriel, et les $p_v, v \in \cali{V}$ forment une famille de représentants de $\cali{P}_A$. \\
+\end{lemme}
+
+\paragraph{Truc :}
+Soit $A$ un anneau factoriel. \\
+$Aa \cap Ab$ est un idéal principal engendré par :
+$$ ppcm(a,b) := \prodd{p \in \cali{P}_A}{} p^{max(v_p(a),v_p(b))}$$
+On dit que les éléments de $A^{\times}ppcm(a,b)$ sont les \textit{plus petits communs multiples} de $a$ et $b$. \\
+
+%% Subsection : Localisation
+\subsection{Localisation, anneaux de fractions}
+Soit $A$ un anneau commutatif (mais pas forcément intègre).
+
+\begin{definition}\textit{(Partie multiplicative).}
+On dit que $S \subset A \backslash \{0\}$ est une partie multiplicative de $A$ si elle vérifie :
+\begin{itemize}
+\item $1 \in S$ \\
+\item $s,t \in S \Longrightarrow st \in S$\\
+\end{itemize}
+\end{definition}
+
+
+% Exemple
+\begin{exemple}
+\begin{itemize}
+\item $S = A \backslash A_{tors}$. Si $A$ est intègre, $A_{tors}= \emptyset \Longrightarrow S = A \backslash \{0\}$. \\
+\item $\forall a \in A \backslash \cali{N}il_A, \tq S = \{a^n \;|\; n \geq 0 \}$ \\
+\item $\forall \cali{P} \in Spec(A), \tq S = A\backslash \cali{P}$ \\
+\end{itemize}
+\end{exemple}
+
+\textit{Remarque :} \\
+Soit $\rho$ un idéal premier de $A$. Alors on a : $A\rho = (A \backslash \rho)^{-1}A$. \\
+
+%% MEH
+\paragraph{meh.}
+Soit $S$, la partie multiplicative de $A$. On munit $S \times A$ de la relation $\sim$ définie par :
+$$ (s,a) \sim (s',a') \Longleftrightarrow \exists t \in S, \tq t(s'a - sa') = 0$$
+
+On note $S^{-1}A = S \times A \backslash \sim$, et $\frac \cdot \cdot : (s,a) \mapsto \frac a s $. \\
+
+On munit tout ça d'une addition et d'une multiplication :
+$$\deff{+}{(S \times A)^2}{\sma}{((s,a),(t,b))}{\frac{ta+sb}{st}}$$ 
+
+$$\deff{\times}{(S \times A)^2}{\sma}{((s,a),(t,b))}{\frac{ab}{st}}$$ 
+
+\begin{tikzcd}
+(S \times A)^2 \arrow[r, "{(+, \times)}"] \arrow[d] & S^{-1}A \\
+(S^{-1}A)^2 \arrow[ru, "{(+, \times)}"', dashed]                 &  
+\end{tikzcd}
+
+\textit{Remarque :} $S^{-1}A$ est appelée la \textit{localisation} de $A$ en $S$. \\
+
+\vspace{0.5cm}
+
+Avec tout ça, on dispose de l'application canonique :
+$$ \deff{i_S}{A}{S^{-1}A}{a}{\frac a 1}$$
+De plus, on a : $i_S(S) \subset (S^{-1}A)^{\times}$.
+
+% Prop universelle localisation
+\paragraph{Propriété universelle de la localisation}
+Pour toute partie multiplicative $S \subset A$, il existe un morphisme d'anneaux $i : A \rightarrow F$, tel que $i(S) \subset F^\times$, tel que : \\
+Pour tout morphisme d'anneaux $\varphi : A \rightarrow B$ tel que $\varphi(S) \subset B^\times$, il existe un unique $\varphi_S : S^{-1}A \rightarrow B, \tq \varphi = \varphi_S \circ \iota$. \\ 
+
+% Exemple
+\paragraph{Exemples :}
+\begin{itemize}
+\item $(A \backslash A_{tors})^{-1}A$ est un anneau de fractions de $A$, avec $S = A \backslash A_{tors}$. Si $A$ est intègre, on retombe sur $Frac(A)$.
+\item $a \in A \backslash \cali{N}il_A$, on note $Aa = S_a^{-1}A$, avec $S_a = \{a^n \;|\; n \geq 0 \}$. \\
+\item $\cali{P} \in Spec(A) $on note
+\end{itemize}
+
+% Exemple
+\textit{Exemple :}
+\begin{itemize}
+\item Si on a $A = \Z$, alors $(A \backslash A_{tors})^{-1}A = \Q$. \\
+\item Soit $p$ premier. En prenant $A = \Z/p\Z$, on a : \\ $(A \backslash A_{tors})^{-1}A = \{ \frac b a \;|\; b \in \Z, a \in \Z/p\Z \} \subset \Q$. \\
+\end{itemize}
+
+% Proposition
+\begin{proposition}
+Soit $A$ un anneau intègre. Toute partie multiplicative $S$ contenant dans $A \backslash \{0\}$, donc : \textit{INSERT COMMUTATIVE DIAGRAM HERE} 
+Le diagramme montre $A$ qui s'injecte dans $S^{-1}A$, lequel s'injecte dans $Frac(A)$. \\
+
+Concrètement, on peut penser aux anneaux $S^{-1}A$ comme à des sous-anneaux de $Frac(A)$. \\
+\end{proposition}
+
+%% SUBSECTION
+\subsection{Idéaux et localisation}
+Soit $S \subset A$ une partie multiplicative. Soit $X$ un sous-ensemble de $A$. \\
+On a alors : $S^{-1}X = \{ \frac a s \;|\; a \in X, s \in S \} \subset \sma$
+
+% Lemme
+\begin{lemme}
+L'application $S^{-1} : \cali{I}_A \longrightarrow \cali{I}_{\sma}$ est surjective, croissante pour l'inclusion et se restreint en une bijection de $\{I \in \cali{I}_A \;|\; S \cap I = \emptyset \}$ vers $\cali{I}_{\sma}$. \\ 
+
+L'application $i_S^{-1} : \cali{I}_{\sma} \longrightarrow \cali{I}_A$ est injective, croissante pour l'inclusion, et induit une bijection de $\cali{I}_{\sma}$ vers $\{ I \in \cali{I}_{A} \;|\; I = \cupp{s \in S}{} s^{-1}I \}$ \\
+\end{lemme}
+
+\textit{Exemple :} \\
+Si $S = A \backslash \rho$, avec $\rho \in Spec(A)$. $A\rho$ est un anneau local d'unique idéal maximal $\rho A\rho$. \\
+En particulier, $k(\rho) := A\rho / \rho A \rho$ est un corps, appelé \textit{corps résiduel} de $A$ en $\rho$. \\
+
+% Corollaire
+\begin{corollaire}
+Si $A$ est noetherien, avec $\sma$ est aussi noethérien. Cela découle de l'injectivité de $i_S^{-1}$. \\
+\end{corollaire}
+
+% Lemme
+\begin{lemme}
+On a les implications suivantes : \\
+\begin{tabular}{rcl}
+$A$ && $\sma$ \\
+intègre & $\Longrightarrow$ & intègre \\
+non intègre& $\Longrightarrow$ & peut être intègre \\
+normal& $\Longrightarrow$ & normal \\
+noetherien& $\Longrightarrow$ & noetherien \\
+principal& $\Longrightarrow$ & principal \\
+factorial& $\Longrightarrow$ & factoriel \\
+\end{tabular}
+\end{lemme}
+
+
+\subsection{Complétion $I$-adique d'un anneau}
+$A$ un anneau commutatif. $(I_n)$ une famille strictement décroissante d'idéaux de $A$. \\
+
+% Théorème : Ostrawski
+\begin{theoreme}[Ostrawski]
+Sur $\Z$ les seules valeurs absolues non triviales sont les valeurs absolues usuelles et les valeurs absolues p-adique.
+\end{theoreme}
+
+%% MODULES SUR LES ANNEAUX
+\section{Modules sur les anneaux}
+\subsection{Définitions et premières constructions}
+\begin{definition}
+Soit $A$ un anneau commutatif. \\
+Un $A$-module est la donnée d'un couple $((M,+), \times)$ où $(M,+)$ est un groupe abélien et où $\times$ est une loi de composition externe $A \times M \rightarrow M$. \\
+
+Le tout vérifiant:
+\begin{itemize}
+\item a(m+n) = am + an
+\item (a+b)m = am+bm
+\item (ab)m = a(bm)
+\item 1 m = m
+\end{itemize}
+
+$((M,+), \times)$ est simplement noté $M$, en général.
+\end{definition}
+
+\textit{Remarque :} \\
+Si $M$ et $N$ sont des $A$-modules, un morphisme de $A$-modules correspond à la donnée d'un morphisme $\varphi$ de groupes entre $(M,+)$ et $(N,+)$ qui est $A$-linéaire, \textit{i.e.} :\\  $\varphi(am) = a \varphi(m)$ \\
+
+\textit{Notation :}
+On note $Hom_A(M,N)$ l'ensemble des morphismes de $A$-modules. \\
+
+\begin{exemple}
+Quelques exemples simples de modules : 
+\begin{itemize}
+\item Les $\Z$-modules sont les goupes abéliens. 
+\item Les $k$-modules sont les $k$-ev
+\item Si $M=A^n$, on dit qu $M$ est un $A$-module libre de rang $n$ (et possède donc une base éventuellement infinie contenant $n$ vecteurs). Si $A$ est un corps, tout $A$-module est libre.
+\item Si $M$ et $N$ sont des $A$-modules, alors $Hom_A(M,N)$ est muni d'une structure de $A$-module induite par : \\
+$(\varphi + \psi)(m) = \varphi(m) + \psi(m)$ et $(\alpha \varphi)(m) = a \varphi(m)$
+\end{itemize}
+\end{exemple}
+
+% Définition
+\begin{definition}
+Soit $M$ un $A$-module. On dit que $N \subset M$ est un sous-$A$-module de $M$ si c'est un sous groupe de $M$ stable par multiplication scalaire.
+\end{definition}
+
+\textit{Exemple :}
+Si $M=A$ est le $A$-module régulier, les sous-modules de $M$ sont exactement les idéaux de $A$. \\
+
+%Proposition (A MODIFIER ?)
+\begin{proposition}
+Soit $I$ un idéal d'un anneau $A$.
+Alors, à tout $A/I$-module, il existe un $A$-module $M$ tel que $IM = 0$.
+\end{proposition}
+
+%% SUBSUBSECTION
+\subsubsection{Somme directe sur les modules}
+
+\begin{definition}
+Soit $(M_i)_{i \in I}$ une famille de $A$-modules. \\
+On définit le groupe abélien $\prodd{I}{} M_i$ avec :
+\begin{itemize}
+\item $\overline{m} + \overline{n} := (m_i + n_i)_{i \in I}$
+\item $a \cdot \overline{m} := (am_i)_{i \in I}$
+\end{itemize}
+
+Avec cette structure de $A$-modules, on a les projections :
+$$ \deff{\rho_j}{\prodd{I}{} M_i}{M_j}{\overline{m}}{m_j}$$
+
+On note $\bigoplus_{I} M_i \subset \prodd{I}{} M_i$ le sous-ensemble $\{ \overline{m} \in \prodd{I}{} M_i \;|\; supp(m) \textrm{ est fini} \}$
+\end{definition}
+
+\textit{Notation :}
+\begin{itemize}
+\item On note $M^I := \prodd{I}{}M_i$, et :\\
+\item $M^{(I)} := \bigoplus_{I} M_I$ \\
+\end{itemize}
+
+
+% Lemme: Nakayama
+\begin{lemme}[Nakayama]
+Soit $A$ un anneau, $M$ un $A$-module, et $I$ un idéal de $A$. \\
+Alors : 
+$$ M = IM \Longleftrightarrow \exists a \in I, \tq (1+a)M=0$$
+\end{lemme}`
+
+%% SUITES EXACTES
+\section{Suites Exactes}
+
+% Définition
+\begin{definition}
+On dit qu'une suite de $A$-modules $ M_0 \overset{u_0}{\longrightarrow} M_1 \overset{u_1}{\longrightarrow} \ldots \overset{u_{n-1}}{\longrightarrow} M_n$ est \textit{exacte} si : \\
+$$\forall i < n, \tq im(u_{i}) = ker(u_{i+1})$$
+
+Les suites exactes de la forme : $\SEC{M'}{M}{M''}{r}{s}$ sont appelées \textit{suites exactes courtes}. \\
+\end{definition}
+
+% Théorème
+\begin{theoreme}
+Soit $\SEC{M'}{M}{M''}{u}{v}$ une suite exacte courte de morphimes de $A$-modules. On assertions suivantes sont équivalentes :
+\begin{itemize}
+\item Il existe un morphisme de $A$-modules $s : M'' \longrightarrow M$ tel que : $v \circ s = Id_{M''}$
+\item Il existe un morphisme de $A$-modules $r : M \longrightarrow M'$ tel que : $r \circ u = Id_{M'}$
+\item Il existe un isomorphisme $f : M \longrightarrow M' \oplus M''$ tel que $ \iota_{M'} = f \circ u$ et $\pi_{M''} \circ f = v$
+\end{itemize}
+On résume ça à l'aide de deux diagrammes : \\
+
+\begin{tabular}{cc}
+\begin{tikzcd}
+M \arrow[r, "f"] \arrow[rd, "v"'] & M' \oplus M'' \arrow[d, "\pi_{M''}"] \\
+                                  & M''                                 
+\end{tikzcd} &
+\begin{tikzcd}
+M \arrow[r, "f"]                            & M' \oplus M'' \\
+M' \arrow[u, "u"] \arrow[ru, "\iota_{M'}"'] &              
+\end{tikzcd}
+\end{tabular}
+
+Lorsque une suite exacte courte vérifie les hypothèses du théorèmes, on dit qu'elle est \textit{scindée}. \\
+\end{theoreme}
+
+
+% Théorème
+\begin{theoreme}
+Soit : \\
+
+\begin{tabular}{ccc}
+$ker(\alpha')$ & $\overset{\exists ! u}{\longrightarrow}$ & $ker(\alpha)$ \\
+$\downarrow$ && $\downarrow$ \\
+$M$ & $\overset{u'}{\longrightarrow}$ & $M$ \\
+$\downarrow$ && $\downarrow$ \\
+$N$ & $\overset{v'}{\longrightarrow}$ & $N$ \\
+$\downarrow$ && $\downarrow$ \\
+$coker(\alpha')$ & $\overset{\exists ! v}{\longrightarrow}$ & $coker(\alpha)$ \\
+\end{tabular}
+
+Il existe des morphismes $u$ et $v$ qui font commuter le diagramme. \\
+\end{theoreme}
+
+% Théorème
+\begin{theoreme}[Lemme du serpent]
+Soit : \\
+
+\begin{tabular}{ccccccccc}
+&& $ker(\alpha')$ & $\overset{u'}{\longrightarrow}$ & $ker(\alpha)$ & $\overset{u}{\longrightarrow}$ & $ker(\alpha'')$ && \\
+&& $\downarrow$ && $\downarrow$ && $\downarrow$ &&\\
+&& $M'$ & $\overset{u'}{\longrightarrow}$ & $M$ & $\overset{u}{\longrightarrow}$ & $M''$ & $\longrightarrow$ & $0$ \\
+&& $\downarrow$ && $\downarrow$ && $\downarrow$ && \\
+$0$ & $\longrightarrow$ & $N'$ & $\overset{v'}{\longrightarrow}$ & $N$ & $\overset{v}{\longrightarrow}$ & $N''$ && \\
+&& $\downarrow$ && $\downarrow$ && $\downarrow$ && \\
+&& $coker(\alpha')$ & $\overset{\exists ! v}{\longrightarrow}$ & $coker(\alpha)$ & $\overset{u}{\longrightarrow}$ & $coker(\alpha'')$ && \\
+\end{tabular}
+
+\end{theoreme}
+
+
+
+%% MODULES INDECOMPOSABLES
+\section{Modules indécomposables et théorème de Krull-Schmidt}
+
+% Définition
+\begin{definition}
+On dit qu'un $A$-module $M$ est \textit{indécomposable} si on ne peut l'écrire comme somme directe $M = M' \oplus M''$ avec $M'$ et $M''$ deux sous-modules non triviaux. 
+\end{definition}
+
+% Exemple
+\begin{exemple}
+$\Z$ est indécomposable comme $\Z$-module. En effet, les sous-$\Z$-modules de $\Z$ sont exactement les $n\Z$ donc si $\Z$ n'était pas indécomposable, on aurait :
+$$ \Z \simeq n\Z \oplus m\Z \simeq \Z \oplus \Z$$
+Mais $\Z$ n'a qu'un générateur, tandis que $\Z \oplus \Z$ en a deux. Les deux ne peuvent donc pas être isomorphes.
+\end{exemple}
+
+% Remarque
+\textit{Remarque :} \\
+Il y a des modules encore plus ''petits'' que les modules indécomposables : \\
+On dit qu'un $A$-module $M$ est \textit{simple} si ses seuls sous-modules sont $\{0\}$ et $M$. \\
+
+% Définition
+\begin{definition}[Local]
+On dit qu'un anneau quelconque $E$ est local si $E\noset{E^*}$ est un idéal. $E\noset{E^*}$ est alors l'unique idéal maximal bilatère de $E$. \\
+Un idéal $I$ de $E$ est dit bilatère si et seulement si :
+$$ \forall e \in E \tq eI \subset I \textrm{ et } Ie \subset I$$
+\end{definition}
+
+% Lemme
+\begin{lemme}
+Soit $M$ un $A$-module. Alors :
+\begin{itemize}
+\item Si $E = End_A(M)$ est local, alors $M$ est indécomposable
+\item Si $M$ est noetherien et artinien, la réciproque est vraie
+\end{itemize}
+\end{lemme}
+
+% Théorème de Krull-Schmidt
+\begin{theoreme}[Krull-Schmidt]
+On note $Ind(A)$ l'ensemble des classes d'isomorphismes des $A$-modules indécomposables. Soit $M$ un $A$-module.
+\begin{itemize}
+\item Si $M$ est noetherien ou artinien, alors : \\
+$ \exists K : Ind(A) \longrightarrow \N$ à support fini, tel que : $M \simeq \opluss{N \in Ind(A)}{} N^{\oplus K(N)}$
+\item Si $M$ est noetherien et artinien, alors la fonction $K$ ci-dessus est unique
+\end{itemize}
+\end{theoreme}
+
+% Lemme
+\begin{lemme}
+Si on a les suites exactes : \\
+
+\begin{tikzcd}
+0 \arrow[r] & K \arrow[r, "\alpha"]   & M \arrow[r, "\beta"]   & Q \arrow[r]  & 0 \\
+0 \arrow[r] & K' \arrow[r, "\alpha'"] & M' \arrow[r, "\beta'"] & Q' \arrow[r] & 0
+\end{tikzcd}
+
+Alors :
+\begin{itemize}
+\item $\beta' \alpha$ est injectif $\Longrightarrow \beta \alpha'$ est injectif
+\item $\beta' \alpha$ est surjectif $\Longrightarrow \beta \alpha'$ est surjectif
+\end{itemize}
+\end{lemme}
+
+% Théorème de structure des modules
+\begin{theoreme}[Structure des modules sur les anneaux principaux]
+Soit $A$ un anneau principal et $M$ un $A$-module de type fini. Alors il existe un unique $r \in \N$ et une unique suite d'idéaux $A \subset I_1 \subset I_r \subset I_s \subset 0$ (inclusion stricte), tel que : \\
+$$ M \simeq A^{\oplus r} \oplus \bigoplus_{i=1}^s A/I_i $$
+
+$r$ et appelé le \textit{rang} de $M$, et les $I_i$ les \textit{facteurs invariants} de $M$.
+\end{theoreme}
+
+\begin{exemple}
+Si $A=\Z$, on retrouve la classification des groupes abéliens finis :
+\begin{itemize}
+\item $6 = 3 \times 2 \longrightarrow \Z/6$
+\item $18 = 2 \times 3^2 \longrightarrow \Z/18 \textrm{ ou } \Z/3 \times \Z/6$
+\end{itemize}
+\end{exemple}
+
+
+% Théorème : classification des indécomposables
+\begin{theoreme}
+Les $A$-modules de torsion type fini qui sont indécomposables sont les $A/\rho^n$ avec $n \geq 1$ et où $\rho \in Spec(A)$. \\
+\end{theoreme}  
+
+
+% Lemme 
+\begin{lemme}
+Soit $A$ un anneau principal. Alors les $A$-modules de type fini et sans torsion sont libres et de la forme $A^{\oplus r}$, avec $r \geq 1$ et $A^{\oplus r} \simeq A^{\oplus s} \Longleftrightarrow r = s$. \\
+\end{lemme}
+
+% Lemme
+\begin{lemme}[Classification des $A$-modules libres de type fini par le rang] \NL
+\begin{itemize}
+\item Le $A$-module libre $A^{(I)}$ est de type fini si et seulement si $|I| < \infty$.
+\item Si $I$, $J$ son deux ensembles finis, alors on a $A^{(I)} \simeq A^{(J)} \Longleftrightarrow |I| =|J|.$
+\end{itemize}
+On dit que $|I|$ est le rang de $A^{(I)}$. \\
+\end{lemme}
+
+\textit{Remarque :} \\
+On peut réecrire ce lemme en  disant que l'application suivante est bijective.
+$$ \deff{}{\N^*}{ \{ \textrm{classes d'isomorphisme de $A$-modules de type fini} \}}{n}{A^{\oplus n}}$$ \\
+
+% Lemme
+\begin{lemme}
+Soit $A$ un anneau principal. Alors tout sous $A$-module d'un $A$-module libre de rang $r$ est libre, de rang inférieur ou égal à $r$. \\
+\end{lemme}
+
+% Théorème
+\begin{theoreme}[De la base adaptée]
+Soit $A$ un anneau principal. Soit $M$ un sous $A$-modulede type fini, et soit $N \subset M$ un sous $A$-module de $M$. \\
+Alors il existe une base $(e_1, \ldots, e_m)$ de $M$ et une unique suite $d_1 | \ldots | d_n$, telle que :
+\begin{itemize}
+\item $ N = \opluss{i=1}{n}A d_i n_i $
+\item $ M = \opluss{i=1}{m}A  n_i $
+\item $ M/N \simeq \opluss{i=1}{n}A/Ad_i \oplus A^{\oplus m-n} $
+\end{itemize}
+\end{theoreme}
+
+% Subsection : Produit tensoriel
+\subsection{Produit tensoriel}
+
+% Subsubsection : Construction
+\subsubsection{Construction du produit tensoriel}
+Soit $M_1, \ldots, M_r$, une famille de $A$-modules. Soit $M$ un $A$-module. \\
+On note $L_{r,A}(M_1 \times \ldots \times M_r, M)$ l'ensemble des applications $A$-multilinéaires.\\
+On note $\Sigma := A^{(M_1 \times \ldots \times M_r)}$ l'ensemles des applications de $M_1 \times \ldots \times M_r$ dans $A$ à support fini.\\
+Pour $\underline m := (m_1, \times \ldots \times m_r)$, on note $e_{\underline m}$ l'élément de $A^{(M_1 \times \ldots \times M_r)}$ tel que 
+$$ e_{\underline m} = (0, \ldots, 0, 1, 0, \ldots, 0)$$
+
+\end{document}
